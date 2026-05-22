@@ -1,165 +1,292 @@
-# Octochains
+🐙 OctaMind
+Multi-Agent Reasoning Framework for Parallel AI Intelligence
+Build modular AI systems using isolated reasoning chains, collaborative aggregation, and developer-first architecture.
 
-[![GOSIM Spotlight 2026](https://img.shields.io/badge/GOSIM_2026-Top_10_Featured_Project-blueviolet)](https://gosim.org) 
-[![License: BSL 1.1](https://img.shields.io/badge/License-BSL_1.1-orange.svg)](LICENSE.md)
-[![Version](https://img.shields.io/badge/version-0.2.0-blue)](https://pypi.org/project/octochains/)
+Python License Status AI
 
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/93aecdbf-10af-4f32-9cf3-18a0547d494a" alt="Octochains Logo" width="40%" style="max-width:260px; min-width:150px;"/>
-</p>
+Overview
+OctaMind is a lightweight Python framework built for collaborative AI reasoning.
 
-**Octochains** is a lightweight, zero-dependency Python framework for **Collaborative AI Reasoning**.It is purpose-built for **Decomposable Tasks**, complex problems that require independent, multi-perspective analysis.
+Traditional AI workflows often depend on a single reasoning path. OctaMind approaches problems differently.
 
-By shifting from monolithic responses to **Parallel Isolated Reasoning**, Octochains ensures that every angle of a decision, from clinical diagnostics to financial risk, is evaluated in threaded isolation, preventing logical contamination and "Expert Blindspots."
+Instead of relying on one model response, the framework enables multiple isolated reasoning agents to analyze a problem independently and combine their outputs into a stronger final conclusion.
 
-## Scientifically Validated Performance
-Octochains is built on the architectural principles validated in the 2026 study **["Towards a Science of Scaling Agent Systems"](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/)** (Google Research / MIT).
+This design works especially well for:
 
-Research confirms that for analytical, decomposable tasks, a **Parallel Isolated** architecture (the core of Octochains) delivers a massive performance delta over standard sequential or single-agent models:
+Analytical reasoning
+Multi-perspective decision systems
+Complex decomposable tasks
+High-confidence AI workflows
+Why OctaMind?
+Single-agent systems often suffer from early reasoning lock-in.
 
-| Benchmark | Task Domain | Performance Gain vs. Single-Agent |
-| :--- | :--- | :--- |
-| **Finance-Agent (FAB)** | **Decomposable Financial Reasoning** | **+80.8% 🚀** |
-| **Workbench** | **Structured Business Planning** | **+57.2%** |
-| **PlanCraft** | **Sequential Automation** | *(Use Single-Agent Instead)* |
+Typical flow:
 
-## Why Octochains?
+Input
+ ↓
+Single Model
+ ↓
+Answer
+OctaMind introduces isolated parallel reasoning:
 
-Standard AI chains suffer from **"Cognitive Tunnel Vision"**, where a model commits to a logical path too early. Octochains eliminates this via:
+Input
+ ↓
+Independent Expert Agents
+ ↓
+Consensus + Verification
+ ↓
+Final Response
+Benefits:
 
-* **Parallel Isolation:** Expert nodes operate in private threads with zero awareness of peers, preventing "logical contamination."
-* **Centralized Verification:** A specialized "Chief Justice" aggregator synthesizes reports, identifying conflicts and evidence gaps before delivering a verdict.
-* **Audit-First Design:** Every decision generates a 100% traceable log of expert rationale, meeting **EU AI Act** requirements for monitorable AI.
+Parallel reasoning
+Reduced bias from single-path logic
+Modular agent workflows
+Better explainability
+Traceable outputs
+Flexible system design
+Core Features
+⚡ Parallel Execution
+Run multiple reasoning agents simultaneously.
 
-## Octochains Anathomy 
+🧠 Independent Analysis
+Agents operate in isolation to avoid reasoning contamination.
 
-https://github.com/user-attachments/assets/ede601fd-0a08-451f-b783-67d854767bb8
+🤝 Consensus Aggregation
+Final outputs are synthesized through dedicated aggregation logic.
 
----
+🔍 Audit-Friendly Design
+Reasoning trails remain transparent and reviewable.
 
-### Quickstart
+🪶 Lightweight Framework
+Minimal core dependencies and clean architecture.
 
-Octochains is designed to be developer-first and model-agnostic.
+🔧 Bring Your Own Model
+Compatible with any LLM provider using callable interfaces.
 
-### 1. Install
-```bash
-pip install octochains
-```
+Architecture
+                    User Problem
+                          │
+                          ▼
 
-### 2. Bring Your Own LLM (Zero-Dependency)
-Octochains requires an `LLMCallable`: a standard Python function that takes a `prompt: str` and returns an output (string, dictionary, or object).
+               ┌────────────────────┐
+               │      Engine        │
+               └────────────────────┘
+                    │     │     │
 
-```python
+            ┌───────┘     │     └───────┐
+            ▼             ▼             ▼
+
+      ┌──────────┐  ┌──────────┐  ┌──────────┐
+      │ Agent A  │  │ Agent B  │  │ Agent C  │
+      └──────────┘  └──────────┘  └──────────┘
+
+            ▼             ▼             ▼
+                    Consensus Layer
+                          │
+                          ▼
+                    Final Decision
+Installation
+Install directly:
+
+pip install octamind
+Or clone locally:
+
+git clone YOUR_REPO_LINK
+cd octamind
+Create environment:
+
+python -m venv venv
+Activate:
+
+Windows
+
+venv\Scripts\activate
+Linux / Mac
+
+source venv/bin/activate
+Install dependencies:
+
+pip install -r requirements.txt
+Bring Your Own LLM
+OctaMind follows a provider-agnostic approach.
+
+Any callable model function can be used.
+
+Example:
+
 import openai
 
-client = openai.Client(api_key="sk-...")
+client = openai.Client(api_key="YOUR_KEY")
 
 def my_llm(prompt: str) -> str:
     response = client.chat.completions.create(
         model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.3
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
     )
-    return response.choices[0].message.content
-```
-### 3. Define Agent
-```python
-from octochains import Agent, tool
 
-class Specialist(Agent):
+    return response.choices[0].message.content
+Creating an Agent
+Agents inherit from the base Agent class.
+
+Example:
+
+from octamind import Agent, tool
+
+class LegalAgent(Agent):
+
     def __init__(self):
+
         super().__init__(
-            role="Legal Expert", 
-            goal="Identify liability risks",
-            input_description="A business proposal document.",
+            role="Legal Analyst",
+            goal="Identify contractual and liability risks",
+            input_description="Business agreement",
             llm_callable=my_llm
         )
 
     @tool
-    def check_compliance(self, text: str):
+    def compliance_check(self, text: str):
+
         """
-        Analyzes text for regulatory non-compliance.
+        Analyze regulatory compliance.
         """
-        # Framework automatically generates JSON schema for this tool
+
         return "Compliant"
 
-    def execute(self, data: str) -> str:
-        # Base class automatically handles the double-blind isolation prompt
-        # and dynamically injects your @tool schemas!
-        prompt = self._build_prompt(data)
-        return self.llm_callable(prompt)
-```
+    def execute(self, data: str):
 
-### 4. Define an Aggregator
-```python
-from octochains import Aggregator
+        prompt = self._build_prompt(data)
+
+        return self.llm_callable(prompt)
+Creating an Aggregator
+Aggregators combine independent reasoning outputs.
+
+Example:
+
+from octamind import Aggregator
 from typing import Any
 
-class ChiefConsensusOfficer(Aggregator):
+class ConsensusAggregator(Aggregator):
+
     def __init__(self):
+
         super().__init__(
-            role="Chief Aggregator",
-            goal="Synthesize expert opinions into a final verdict",
+            role="Consensus Builder",
+            goal="Merge expert findings",
             llm_callable=my_llm
         )
 
-    def execute(self, agent_reports: dict[str, str]) -> Any:
-        """
-        Receives a dictionary of reports.
-        Key: Agent Role, Value: Agent output string.
-        Can return a string, or natively return a structured JSON/Pydantic object!
-        """
-        # Helper method cleanly formats the raw dictionary
-        compiled_reports = self._format_reports(agent_reports)
-        
-        prompt = f"""
-        Role: {self.role}
-        Goal: {self.goal}
-        Reports:{compiled_reports}
-        FINAL VERDICT:
-        """
-        return self.llm_callable(prompt)
-```
-### 5. Run the Parallel Engine
-```python
-from octochains import Engine
+    def execute(
+        self,
+        reports: dict[str, str]
+    ) -> Any:
 
-# Initialize your experts and the aggregator
-legal_expert = Specialist()
-# finance_expert = FinanceSpecialist()
-# tech_expert = TechSpecialist()
+        formatted = self._format_reports(
+            reports
+        )
+
+        prompt = f"""
+        Reports:
+        {formatted}
+
+        Final conclusion:
+        """
+
+        return self.llm_callable(prompt)
+Running the Engine
+Launch collaborative reasoning:
+
+from octamind import Engine
+
+legal = LegalAgent()
 
 engine = Engine(
-    agents=[legal_expert], # Add as many agents as you need
-    aggregator=ChiefConsensusOfficer()
+    agents=[legal],
+    aggregator=ConsensusAggregator()
 )
 
-# Broadcast the complex problem to all agents at once
-report = engine.run("Full Project Alpha Investment Case File...")
+result = engine.run(
+    "Project investment analysis"
+)
 
-print(f"Consensus: {report.consensus}")
-print(f"Audit Trail: {report.traces}")
-```
+print(result.consensus)
+print(result.traces)
+Example Applications
+OctaMind works especially well for:
 
-## Architecture & Strategy
-Octochains is designed for high-stakes environments where "vibe-based" AI isn't enough. It excels in **Medical Diagnostics**, **Legal Audits**, and **Strategic Business and Financial Analysis**.
+⚖️ Legal Review
+Risk and compliance analysis.
 
-## Repository Structure
-* `/src/octochains/engine.py`: The high-performance parallel execution engine.
-* `/src/octochains/agents/`: A growing library of specialized experts (Finance, Legal, Medical and etc.).
-* `/src/octochains/aggregators/`: Standardized synthesis logic (Majority Vote, Weighted Consensus, etc.).
+🩺 Medical Reasoning
+Independent diagnostic perspectives.
 
-## Future Roadmap
-We are expanding Octochains from a library into a comprehensive ecosystem for high-stakes reasoning:
+💼 Business Strategy
+Structured planning and evaluation.
 
-* Community-driven marketplace for pre-tuned specialists Agents.
+📈 Financial Analysis
+Multi-perspective investment reasoning.
 
-## License
-Octochains is **Fair-code**, distributed under the **Business Source License 1.1**.
+🔬 Research Systems
+Collaborative evidence synthesis.
 
-* **Individuals & Internal Use:** Free to use for personal projects, research, and internal business workflows.
-* **Commercial Providers:** You **cannot** offer Octochains as a managed SaaS or sell a commercial wrapper of the engine without a license.
-* **The Guarantee:** On **May 10, 2030**, this version automatically becomes **Apache 2.0 (Open Source)**.
+Repository Structure
+src/
+├── engine/
+├── agents/
+├── aggregators/
+├── demos/
+├── tests/
+└── docs/
+Main modules:
 
-**To access the Enterprise Reasoning Features, contact:** [ahmad.vh7@gmail.com](mailto:ahmad.vh7@gmail.com)
-<img referrerpolicy="no-referrer-when-downgrade" src="https://static.scarf.sh/a.png?x-pxid=e5ca0204-186e-4871-b23b-249181c25fd2" />
+Engine → Parallel execution
+Agents → Domain specialists
+Aggregators → Consensus logic
+Demos → Examples
+Docs → Documentation
+Roadmap
+Planned development:
+
+ Agent marketplace
+ Memory systems
+ Tool ecosystem
+ Visual workflow debugger
+ Distributed execution
+ Dashboard UI
+License
+OctaMind follows a Fair-Code model using:
+
+Business Source License 1.1
+
+Usage:
+
+✅ Personal use
+✅ Research
+✅ Internal workflows
+
+Restricted:
+
+❌ Commercial hosted wrappers without license
+
+Future transition:
+
+This project is designed to transition toward Apache 2.0 according to licensing terms.
+
+Contact
+Questions, feedback, or collaboration:
+
+📩 ganisettivarun8@gmail.com
+
+Open an Issue for:
+
+Bugs
+Features
+Technical discussions
+⭐ Support the Project
+If OctaMind helps your work, consider starring the repository.
+
+Build smarter collaborative AI systems 🚀
